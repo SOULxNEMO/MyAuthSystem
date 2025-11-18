@@ -17,8 +17,8 @@ app.use(express.json());
 app.use("/auth", require("./routes/auth"));
 app.use("/api/admin", require("./routes/admin"));
 
-app.use("/api/user", require("./routes/user"));
-app.use("/api/keys", require("./routes/keys"));
+app.use("/api/user", require("./routes/User"));
+app.use("/api/keys", require("./routes/Keys"));
 
 
 // MongoDB connect
@@ -27,6 +27,7 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => console.log(err));
 
 app.listen(3000, () => console.log("Server running on port 3000"));
+
 
 
 
