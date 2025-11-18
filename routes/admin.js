@@ -9,23 +9,30 @@ const { auth, adminOnly } = require("../middleware/auth");
 // ---------------------------
 // ADMIN LOGIN
 // ---------------------------
-router.post("/login", async (req, res) => {
+
+
+// POST /api/admin/login
+router.post("/login", (req, res) => {
     const { password } = req.body;
 
     if (!password)
-        return res.json({ error: "Missing password" });
+        return res.status(400).json({ error: "Missing password" });
 
     if (password !== process.env.ADMIN_PASSWORD)
-        return res.json({ error: "Invalid password" });
+        return res.status(401).json({ error: "Invalid password" });
 
+    // Create admin token
     const token = jwt.sign(
         { role: "admin" },
         process.env.ADMIN_JWT_SECRET,
-        { expiresIn: "7d" }
+        { expiresIn: "1d" }
     );
 
     res.json({ token });
 });
+
+module.exports = router;
+
 
 
 // ---------------------------
@@ -82,4 +89,5 @@ router.get("/logs", auth, adminOnly, async (req, res) => {
 });
 
 module.exports = router;
+
 
