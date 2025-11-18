@@ -12,17 +12,12 @@ const { auth, adminOnly } = require("../middleware/auth");
 router.post("/login", async (req, res) => {
     const { password } = req.body;
 
-    // Check if admin password is missing in env
-    if (!process.env.ADMIN_PASSWORD) {
-        return res.status(500).json({ error: "Server misconfigured: ADMIN_PASSWORD missing" });
-    }
+    if (!password)
+        return res.json({ error: "Missing password" });
 
-    // Compare password
-    if (password !== process.env.ADMIN_PASSWORD) {
-        return res.status(401).json({ error: "Invalid password" });
-    }
+    if (password !== process.env.ADMIN_PASSWORD)
+        return res.json({ error: "Invalid password" });
 
-    // Generate admin token
     const token = jwt.sign(
         { role: "admin" },
         process.env.ADMIN_JWT_SECRET,
@@ -31,6 +26,7 @@ router.post("/login", async (req, res) => {
 
     res.json({ token });
 });
+
 
 // ---------------------------
 // Get all users
@@ -86,3 +82,4 @@ router.get("/logs", auth, adminOnly, async (req, res) => {
 });
 
 module.exports = router;
+
