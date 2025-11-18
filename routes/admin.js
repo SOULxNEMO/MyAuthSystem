@@ -1,6 +1,6 @@
 const express = require("express");
-const router = express.Router();
 const jwt = require("jsonwebtoken");
+const router = express.Router();
 const Key = require("../models/Key");
 const User = require("../models/User");
 const Log = require("../models/LoginLog");
@@ -11,7 +11,10 @@ const { auth, adminOnly } = require("../middleware/auth");
 // ---------------------------
 
 
-// POST /api/admin/login
+
+// -------------------------------
+// ADMIN LOGIN
+// -------------------------------
 router.post("/login", (req, res) => {
     const { password } = req.body;
 
@@ -21,7 +24,6 @@ router.post("/login", (req, res) => {
     if (password !== process.env.ADMIN_PASSWORD)
         return res.status(401).json({ error: "Invalid password" });
 
-    // Create admin token
     const token = jwt.sign(
         { role: "admin" },
         process.env.ADMIN_JWT_SECRET,
@@ -32,6 +34,9 @@ router.post("/login", (req, res) => {
 });
 
 module.exports = router;
+
+
+
 
 
 
@@ -89,5 +94,6 @@ router.get("/logs", auth, adminOnly, async (req, res) => {
 });
 
 module.exports = router;
+
 
 
